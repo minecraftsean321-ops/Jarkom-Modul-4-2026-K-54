@@ -85,3 +85,411 @@ In this project we will make subnetting for the topology that been given, and we
 | Navi (Cabang kanan) | /22 | 1024 | 6144 | 192.238.24.0 | 255.255.252.0 | 192.238.24.1 - 192.238.27.254 | 192.238.24.1 | 192.238.27.255 |
 | Cabang atas | /24 | 256 | 7168 | 192.238.28.0 | 255.255.255.0 | 192.238.28.1 - 192.238.28.254 | 192.238.28.1 | 192.238.28.255 |
 | Seluruh jaringan | /19 | 8192 | 0 | 192.238.0.0 | 255.255.224.0 | 192.238.0.1 - 192.238.31.254 | 192.238.0.1 | 192.238.31.255 |
+
+------------------------------------------------------------------------
+ROUTER Cyberia
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Cyberia
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Ke Cloud0 (NAT, outside)
+ ip address dhcp
+ ip nat outside
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch1 (JJ, MyuMyu)
+ ip address 192.238.28.1 255.255.255.128
+ ip nat inside
+ no shutdown
+!
+interface FastEthernet1/0
+ description Link ke Wired
+ ip address 192.238.28.129 255.255.255.252
+ ip nat inside
+ no shutdown
+!
+access-list 1 permit 192.238.0.0 0.0.31.255
+ip nat inside source list 1 interface FastEthernet0/0 overload
+!
+ip route 192.238.0.0 255.255.224.0 192.238.28.130
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Wired
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Wired
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Cyberia
+ ip address 192.238.28.130 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description Link ke Navi
+ ip address 192.238.25.65 255.255.255.252
+ no shutdown
+!
+interface FastEthernet1/0
+ description Segmen Switch2 (Psyche, Copland, Schumann)
+ ip address 192.238.2.65 255.255.255.248
+ no shutdown
+!
+interface FastEthernet1/1
+ description Link ke Tachibana
+ ip address 192.238.16.21 255.255.255.252
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.28.129
+ip route 192.238.16.0 255.255.248.0 192.238.16.22
+ip route 192.238.24.0 255.255.252.0 192.238.25.66
+ip route 192.238.0.0 255.255.252.0 192.238.2.67
+ip route 192.238.2.64 255.255.255.224 192.238.2.68
+ip route 192.238.4.0 255.255.252.0 192.238.2.68
+ip route 192.238.8.0 255.255.252.0 192.238.2.66
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Navi
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Navi
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Wired
+ ip address 192.238.25.66 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch6 (Alice, Reika)
+ ip address 192.238.26.1 255.255.255.0
+ no shutdown
+!
+interface FastEthernet1/0
+ description LAN Switch7 (Taro)
+ ip address 192.238.25.1 255.255.255.192
+ no shutdown
+!
+interface FastEthernet1/1
+ description LAN Switch8 (Yasuo, Miho, Kuma)
+ ip address 192.238.24.1 255.255.255.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.25.65
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Psyche
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Psyche
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Segmen Switch2
+ ip address 192.238.2.66 255.255.255.248
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch3 (Karl, Lin)
+ ip address 192.238.8.1 255.255.252.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.2.65
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Copland
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Copland
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Segmen Switch2
+ ip address 192.238.2.67 255.255.255.248
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Juri (langsung)
+ ip address 192.238.2.1 255.255.255.192
+ no shutdown
+!
+interface FastEthernet1/0
+ description LAN Switch4 (Masayuki)
+ ip address 192.238.0.1 255.255.254.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.2.65
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Schumann
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Schumann
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Segmen Switch2
+ ip address 192.238.2.68 255.255.255.248
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Akashic (langsung)
+ ip address 192.238.2.81 255.255.255.248
+ no shutdown
+!
+interface FastEthernet1/0
+ description Link ke Accela
+ ip address 192.238.2.73 255.255.255.252
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.2.65
+ip route 192.238.4.0 255.255.252.0 192.238.2.74
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Accela
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Accela
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Schumann
+ ip address 192.238.2.74 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch5 (Omnipresence, Denpa)
+ ip address 192.238.4.1 255.255.252.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.2.73
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Tachibana
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Tachibana
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Wired
+ ip address 192.238.16.22 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch9 (Collective, Ghost)
+ ip address 192.238.20.1 255.255.254.0
+ no shutdown
+!
+interface FastEthernet1/0
+ description Link ke Deus
+ ip address 192.238.16.17 255.255.255.252
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.16.21
+ip route 192.238.16.0 255.255.252.0 192.238.16.18
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Deus
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Deus
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description LAN Switch10 (Lilith, Specter)
+ ip address 192.238.18.1 255.255.255.128
+ no shutdown
+!
+interface FastEthernet0/1
+ description Link ke Tachibana
+ ip address 192.238.16.18 255.255.255.252
+ no shutdown
+!
+interface FastEthernet1/0
+ description Link ke Protocol7
+ ip address 192.238.16.13 255.255.255.252
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.16.17
+ip route 192.238.16.0 255.255.254.0 192.238.16.14
+ip route 192.238.16.20 255.255.255.252 192.238.16.17
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Protocol7
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Protocol7
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Deus
+ ip address 192.238.16.14 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch11 (Chisa, Hodgeson)
+ ip address 192.238.17.1 255.255.255.192
+ no shutdown
+!
+interface FastEthernet1/0
+ description Link ke Knights
+ ip address 192.238.16.9 255.255.255.252
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.16.13
+ip route 192.238.16.0 255.255.255.0 192.238.16.10
+ip route 192.238.16.16 255.255.255.248 192.238.16.13
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Knights
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Knights
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Protocol7
+ ip address 192.238.16.10 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Eiri (langsung)
+ ip address 192.238.16.33 255.255.255.248
+ no shutdown
+!
+interface FastEthernet1/0
+ description Link ke Phantoma
+ ip address 192.238.16.5 255.255.255.252
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.16.9
+ip route 192.238.16.0 255.255.255.252 192.238.16.6
+ip route 192.238.16.64 255.255.255.224 192.238.16.6
+ip route 192.238.16.128 255.255.255.192 192.238.16.6
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Phantoma
+------------------------------------------------------------------------
+```
+enable
+configure terminal
+hostname Phantoma
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Knights
+ ip address 192.238.16.6 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description Link ke Shibuya
+ ip address 192.238.16.1 255.255.255.252
+ no shutdown
+!
+interface FastEthernet1/0
+ description LAN Switch12 (Semi)
+ ip address 192.238.16.65 255.255.255.224
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.16.5
+ip route 192.238.16.128 255.255.255.192 192.238.16.2
+!
+end
+write memory
+```
+
+------------------------------------------------------------------------
+ROUTER Shibuya
+------------------------------------------------------------------------
+
+```
+enable
+configure terminal
+hostname Shibuya
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description Link ke Phantoma
+ ip address 192.238.16.2 255.255.255.252
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN Switch13 (Lain, Mika)
+ ip address 192.238.16.129 255.255.255.192
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.238.16.1
+!
+end
+write memory
+```
