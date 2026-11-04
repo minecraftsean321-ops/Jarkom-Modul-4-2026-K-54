@@ -523,3 +523,28 @@ show ip route
   <img width="907" height="138" alt="image" src="https://github.com/user-attachments/assets/5b823a58-625f-41ef-97b8-534faf18fbed" />
 
 ### Ping dari end device 
+
+- Mika (Ujung rantai di Shibuya) -> Taro (PC di Navi)
+  ```
+   ping 192.238.25.2
+  ```
+  <img width="747" height="269" alt="image" src="https://github.com/user-attachments/assets/129f4c98-b61d-491f-ab4b-f097356d97bf" />
+
+- JJ (Cabang atas, Cyberia) -> Omnipresence (PC di Accela)
+  ```
+   ping 192.238.4.2
+  ```
+  <img width="802" height="268" alt="image" src="https://github.com/user-attachments/assets/0c84ea45-67e3-4c42-8416-50cd25c9a433" />
+
+- Karl (Cabang kiri, Psyche) -> Yasuo (PC di Navi)
+  ```
+   ping 192.238.24.2
+  ```
+  <img width="805" height="264" alt="image" src="https://github.com/user-attachments/assets/029f901e-e560-4341-aceb-bb4555c940df" />
+
+- Omnipresence (Cabang kiri, jalur terjauh via Accela) -> Alice (Laptop di Navi)
+  ```
+   ping 192.238.26.2
+  ```
+  <img width="767" height="262" alt="image" src="https://github.com/user-attachments/assets/da6b897b-a228-4b5c-97f7-3ac0f809b7da" />
+
