@@ -493,3 +493,30 @@ ip route 0.0.0.0 0.0.0.0 192.238.16.1
 end
 write memory
 ```
+
+## Tahap Pengujian 
+
+### Cek tiap router 
+
+```
+show ip interface brief
+show ip route
+```
+
+- Wired
+<img width="912" height="161" alt="image" src="https://github.com/user-attachments/assets/8607faa7-1c82-4259-8f97-aef4ca20e131" />  
+<img width="923" height="296" alt="image" src="https://github.com/user-attachments/assets/d6463bef-35b4-4eaf-b2be-a56505b94236" />
+
+- Pysche
+<img width="909" height="99" alt="image" src="https://github.com/user-attachments/assets/afabedfb-be0a-47a5-a739-397073d1cbdd" />  
+<img width="911" height="136" alt="image" src="https://github.com/user-attachments/assets/60e495c6-1e79-4442-9e41-e5fa6af58bb7" />
+
+- Navi
+<img width="913" height="141" alt="image" src="https://github.com/user-attachments/assets/46fb274c-48f4-4e95-8171-f22f6fc0b1a8" />  
+<img width="911" height="174" alt="image" src="https://github.com/user-attachments/assets/6b52cad0-b529-44c1-885a-b2a7ab220099" />
+
+- Tachibana
+<img width="916" height="137" alt="image" src="https://github.com/user-attachments/assets/c9a7e668-dcad-4dae-816b-63f1b2fe94f8" />  
+<img width="907" height="168" alt="image" src="https://github.com/user-attachments/assets/8e509529-f066-4f7f-b67e-92037dad5aa8" />
+
+
