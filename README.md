@@ -495,4 +495,31 @@ show ip route
 <img width="916" height="137" alt="image" src="https://github.com/user-attachments/assets/c9a7e668-dcad-4dae-816b-63f1b2fe94f8" />  
 <img width="907" height="168" alt="image" src="https://github.com/user-attachments/assets/8e509529-f066-4f7f-b67e-92037dad5aa8" />
 
+### Ping antar Router
 
+
+- Wired -> Cyberia
+  ```
+   ping 192.238.28.1
+  ```
+  <img width="911" height="141" alt="image" src="https://github.com/user-attachments/assets/15366977-d30b-4fd4-9d01-12d827552265" />
+
+- Wired -> Navi
+  ```
+   ping 192.238.26.1
+  ```
+  <img width="909" height="136" alt="image" src="https://github.com/user-attachments/assets/4a0ae52c-5a87-4ebd-84bd-45c5dc018285" />
+
+- Wired -> Pysche
+  ```
+   ping 192.238.8.1
+  ```
+  <img width="911" height="136" alt="image" src="https://github.com/user-attachments/assets/95e15737-0f4c-4ff9-9371-c41c5d4dd2cc" />
+
+- Wired -> Tachibana
+  ```
+   ping 192.238.20.1
+  ```
+  <img width="907" height="138" alt="image" src="https://github.com/user-attachments/assets/5b823a58-625f-41ef-97b8-534faf18fbed" />
+
+### Ping dari end device 
