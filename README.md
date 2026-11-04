@@ -548,3 +548,40 @@ show ip route
   ```
   <img width="767" height="262" alt="image" src="https://github.com/user-attachments/assets/da6b897b-a228-4b5c-97f7-3ac0f809b7da" />
 
+### Cek jalur 
+
+- Dari Mika
+  ```
+   tracert 192.238.8.2
+  ```
+  Hop yang diharapkan: Shibuya, Phantoma, Knights, Protocol7, Deus, Tachibana, Wired, Psyche, lalu Karl.
+
+  <img width="802" height="294" alt="image" src="https://github.com/user-attachments/assets/e493a99a-329d-42f7-971d-e5f4e0a5a542" />
+
+- Dari Omnipresence
+  ```
+   tracert 192.238.20.2
+  ```
+  Hop yang diharapkan: Accela, Schumann, Wired, Tachibana, Collective
+
+  <img width="783" height="220" alt="image" src="https://github.com/user-attachments/assets/c8627d75-3b28-4f68-b7a6-f01e62799bc3" />
+
+### Cek NAT (CLI Cyberia)
+
+```
+ show ip interface brief
+ show ip nat translations
+ show ip route
+```
+<img width="907" height="193" alt="image" src="https://github.com/user-attachments/assets/375478cc-b670-4a92-9ef7-7791a4616134" />  
+<img width="908" height="166" alt="image" src="https://github.com/user-attachments/assets/e37ca79f-629d-4416-9c50-6574d60d9d89" />
+
+
+
+
+
+
+
+  
+  
+
