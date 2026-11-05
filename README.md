@@ -577,11 +577,367 @@ show ip route
 <img width="908" height="166" alt="image" src="https://github.com/user-attachments/assets/e37ca79f-629d-4416-9c50-6574d60d9d89" />
 
 
+## GNS3 - VLSM
 
+### Topology
 
+<img width="1271" height="685" alt="Screenshot 2026-11-05 at 10 24 48" src="https://github.com/user-attachments/assets/ec13ace5-334b-46c9-a46e-e7692b999d72" />
 
+## Pembagian IP - VLSM
 
+<img width="979" height="393" alt="Screenshot 2026-11-05 at 10 27 33" src="https://github.com/user-attachments/assets/0743b798-256f-493c-a5cd-455375a6f86a" />
 
-  
+# Konfigurasi Router
+
+## 1. Router Cyberia
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+# Interface
+dhclient eth0 2>/dev/null || udhcpc -i eth0 2>/dev/null
+ip addr flush dev eth1
+ip addr add 192.238.16.57/30 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.14.1/25 dev eth2
+ip link set eth2 up
+
+# Routing (Agregasi seluruh subnet internal via Wired)
+ip route replace 192.238.0.0/19 via 192.238.16.58
+
+# NAT Masquerade ke Internet
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE 2>/dev/null
+EOF
+bash /root/script.sh
+```
+
+## 2. Router Wired
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+# Interface
+ip addr flush dev eth0
+ip addr add 192.238.16.58/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.16.33/29 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.65/30 dev eth2
+ip link set eth2 up
+
+ip addr flush dev eth3
+ip addr add 192.238.16.69/30 dev eth3
+ip link set eth3 up
+
+# Default Route ke Cyberia
+ip route replace default via 192.238.16.57
+
+# Routing Cabang Kiri (Switch2: Psyche, Copland, Schumann)
+ip route replace 192.238.0.0/22 via 192.238.16.34
+ip route replace 192.238.8.0/23 via 192.238.16.34
+ip route replace 192.238.15.192/26 via 192.238.16.35
+ip route replace 192.238.4.0/22 via 192.238.16.36
+ip route replace 192.238.16.40/29 via 192.238.16.36
+ip route replace 192.238.16.60/30 via 192.238.16.36
+
+# Routing Cabang Kanan (Navi: Agregasi Switch6 & Switch8)
+ip route replace 192.238.12.0/23 via 192.238.16.66
+ip route replace 192.238.15.64/26 via 192.238.16.66
+
+# Routing Cabang Bawah (Tachibana s.d. Shibuya)
+ip route replace 192.238.10.0/23 via 192.238.16.70
+ip route replace 192.238.14.128/25 via 192.238.16.70
+ip route replace 192.238.15.128/26 via 192.238.16.70
+ip route replace 192.238.16.48/29 via 192.238.16.70
+ip route replace 192.238.16.0/27 via 192.238.16.70
+ip route replace 192.238.15.0/26 via 192.238.16.70
+ip route replace 192.238.16.72/29 via 192.238.16.70
+ip route replace 192.238.16.80/29 via 192.238.16.70
+ip route replace 192.238.16.88/30 via 192.238.16.70
+EOF
+bash /root/script.sh
+```
+
+## 3. Router Psyche
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.34/29 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.0.1/22 dev eth1
+ip link set eth1 up
+
+ip route replace default via 192.238.16.33
+EOF
+bash /root/script.sh
+```
+
+## 4. Router Copland
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.35/29 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.15.193/26 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.8.1/23 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.33
+EOF
+bash /root/script.sh
+```
+
+## 5. Router Schumann
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.36/29 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.16.41/29 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.61/30 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.33
+ip route replace 192.238.4.0/22 via 192.238.16.62
+EOF
+bash /root/script.sh
+```
+
+## 6. Router Accela
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.62/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.4.1/22 dev eth1
+ip link set eth1 up
+
+ip route replace default via 192.238.16.61
+EOF
+bash /root/script.sh
+```
+
+## 7. Router Navi
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.66/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.12.1/24 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.15.65/26 dev eth2
+ip link set eth2 up
+
+ip addr flush dev eth3
+ip addr add 192.238.13.1/24 dev eth3
+ip link set eth3 up
+
+ip route replace default via 192.238.16.65
+EOF
+bash /root/script.sh
+```
+
+## 8. Router Tachibana
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.70/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.10.1/23 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.73/30 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.69
+ip route replace 192.238.14.128/25 via 192.238.16.74
+ip route replace 192.238.15.128/26 via 192.238.16.74
+ip route replace 192.238.16.48/29 via 192.238.16.74
+ip route replace 192.238.16.0/27 via 192.238.16.74
+ip route replace 192.238.15.0/26 via 192.238.16.74
+EOF
+bash /root/script.sh
+```
+
+## 9. Router Deus
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.74/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.14.129/25 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.77/30 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.73
+ip route replace 192.238.15.128/26 via 192.238.16.78
+ip route replace 192.238.16.48/29 via 192.238.16.78
+ip route replace 192.238.16.0/27 via 192.238.16.78
+ip route replace 192.238.15.0/26 via 192.238.16.78
+EOF
+bash /root/script.sh
+```
+
+## 10. Router Protocol7
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.78/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.15.129/26 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.81/30 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.77
+ip route replace 192.238.16.48/29 via 192.238.16.82
+ip route replace 192.238.16.0/27 via 192.238.16.82
+ip route replace 192.238.15.0/26 via 192.238.16.82
+EOF
+bash /root/script.sh
+```
+
+## 11. Router Knights
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.82/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.16.49/29 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.85/30 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.81
+ip route replace 192.238.16.0/27 via 192.238.16.86
+ip route replace 192.238.15.0/26 via 192.238.16.86
+EOF
+bash /root/script.sh
+```
+
+## 12. Router Phantoma
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.86/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.16.1/27 dev eth1
+ip link set eth1 up
+
+ip addr flush dev eth2
+ip addr add 192.238.16.89/30 dev eth2
+ip link set eth2 up
+
+ip route replace default via 192.238.16.85
+ip route replace 192.238.15.0/26 via 192.238.16.90
+EOF
+bash /root/script.sh
+```
+
+## 13. Router Shibuya
+
+```bash
+cat << 'EOF' > /root/script.sh
+#!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
+
+ip addr flush dev eth0
+ip addr add 192.238.16.90/30 dev eth0
+ip link set eth0 up
+
+ip addr flush dev eth1
+ip addr add 192.238.15.1/26 dev eth1
+ip link set eth1 up
+
+ip route replace default via 192.238.16.89
+EOF
+bash /root/script.sh
+```
   
 
